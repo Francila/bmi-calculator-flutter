@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'card_contend.dart';
 import 'reusable_card.dart';
 import 'constants.dart';
+import 'bmi_result.dart';
+import 'calculator_brain.dart';
 
 enum Gender { MALE, FEMALE }
 
@@ -17,6 +19,7 @@ class _InputPageState extends State<InputPage> {
   Color femaleColor = kInactiveColor;
   int height = 180;
   int weight = 80;
+  int age = 18;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +126,10 @@ class _InputPageState extends State<InputPage> {
                 ),
               ),
               Expanded(
-                child: ReusableCard(colour: kActiveColor),
+                child: ReusableCard(
+                  colour: kActiveColor,
+                  cardChild: buildColumn('AGE'),
+                ),
               ),
             ],
           ),
@@ -133,12 +139,40 @@ class _InputPageState extends State<InputPage> {
           margin: EdgeInsets.only(top: 10.0),
           height: kFootnoteHeight,
           width: double.infinity,
+          child: GestureDetector(
+            onTap: () {
+              CalculatorBrain c = CalculatorBrain(height, weight);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BMIResult(c)),
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'CALCULATE YOUR BMI',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 19.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
         ),
       ]),
     );
   }
 
   Column buildColumn(String label) {
+    int dataToChange;
+    if (label == 'WEIGHT') {
+      dataToChange = weight;
+    } else if (label == 'AGE') {
+      dataToChange = age;
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -147,7 +181,7 @@ class _InputPageState extends State<InputPage> {
           style: kLabelTextStyle,
         ),
         Text(
-          weight.toString(),
+          dataToChange.toString(),
           style: kLabelTitleStyle,
         ),
         Row(
@@ -160,6 +194,8 @@ class _InputPageState extends State<InputPage> {
                   setState(() {
                     if (label == 'WEIGHT') {
                       weight++;
+                    } else if (label == 'AGE') {
+                      age++;
                     }
                   });
                 },
@@ -172,6 +208,8 @@ class _InputPageState extends State<InputPage> {
                   setState(() {
                     if (label == 'WEIGHT') {
                       weight--;
+                    } else if (label == 'AGE') {
+                      age--;
                     }
                   });
                 },
