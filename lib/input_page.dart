@@ -119,48 +119,7 @@ class _InputPageState extends State<InputPage> {
               Expanded(
                 child: ReusableCard(
                   colour: kActiveColor,
-                  cardChild: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'WEIGHT',
-                        style: kLabelTextStyle,
-                      ),
-                      Text(
-                        weight.toString(),
-                        style: kLabelTitleStyle,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FloatingActionButton(
-                            backgroundColor: Color(0xFF4C4F5E),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                weight++;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            width: 7.0,
-                          ),
-                          FloatingActionButton(
-                            backgroundColor: Color(0xFF4C4F5E),
-                            child: Icon(Icons.remove, color: Colors.white),
-                            onPressed: () {
-                              setState(() {
-                                weight--;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  cardChild: buildColumn('WEIGHT'),
                 ),
               ),
               Expanded(
@@ -176,6 +135,69 @@ class _InputPageState extends State<InputPage> {
           width: double.infinity,
         ),
       ]),
+    );
+  }
+
+  Column buildColumn(String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          label,
+          style: kLabelTextStyle,
+        ),
+        Text(
+          weight.toString(),
+          style: kLabelTitleStyle,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: RoundIconButton(
+                childIcon: Icon(Icons.add),
+                onPressedBehaviour: () {
+                  setState(() {
+                    if (label == 'WEIGHT') {
+                      weight++;
+                    }
+                  });
+                },
+              ),
+            ),
+            Expanded(
+              child: RoundIconButton(
+                childIcon: Icon(Icons.remove),
+                onPressedBehaviour: () {
+                  setState(() {
+                    if (label == 'WEIGHT') {
+                      weight--;
+                    }
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class RoundIconButton extends StatelessWidget {
+  final Widget childIcon;
+  final Function onPressedBehaviour;
+  RoundIconButton({this.childIcon, this.onPressedBehaviour});
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      shape: CircleBorder(),
+      elevation: 0,
+      disabledElevation: 0,
+      splashColor: Color(0xFFEB1555),
+      fillColor: Color(0xFF4C4F5E),
+      child: childIcon,
+      onPressed: onPressedBehaviour,
     );
   }
 }
